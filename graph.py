@@ -27,6 +27,36 @@ class Graph:
 
         return (source_node, destination_node)
 
+    def remove_node(self, value):
+        if value in self.nodes:
+            node = self.nodes[value]
+            if self.mode == UNDIRECTED:
+                for adj_node in node.get_adjacents():
+                    adj_node.remove_adjacent(node)
+
+            del self.nodes[value]
+
+            return node
+
+        return None
+
+    def remove_edge(self, source, destination):
+
+        source_node = self.add_node(source)
+        destination_node = self.add_node(destination)
+
+        source_node.remove_adjacent(destination_node)
+        if self.mode == UNDIRECTED:
+            destination_node.remove_adjacent(source_node)
+
+        return (source_node, destination_node)
+
+    def breadth_first_search(self):
+        pass
+
+    def depth_first_search(self):
+        pass
+
 
 class Node:
 
