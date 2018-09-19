@@ -1,3 +1,6 @@
+from queue import Queue
+
+
 DIRECTED = "DIRECTED"
 UNDIRECTED = "UNDIRECTED"
 
@@ -51,11 +54,37 @@ class Graph:
 
         return (source_node, destination_node)
 
-    def breadth_first_search(self):
-        pass
+    def breadth_first_search(self, source):
+        queue = Queue()
 
-    def depth_first_search(self):
-        pass
+        source_node = self.add_node(source)
+        queue.put(source_node)
+
+        visited = []
+
+        while not queue.empty():
+            next_node = queue.get()
+
+            print(next_node.value)
+
+            visited.append(next_node)
+
+            for neighbor in next_node.get_adjacents():
+                if neighbor not in visited:
+                    visited.append(neighbor)
+                    queue.put(neighbor)
+
+    def depth_first_search(self, source, visited=None):
+        source_node = self.add_node(source)
+
+        if visited is None:
+            visited = []
+
+        if source_node not in visited:
+            visited.append(source_node)
+            print(source_node.value)
+            for child in source_node.get_adjacents():
+                self.depth_first_search(child.value, visited)
 
 
 class Node:
@@ -77,3 +106,22 @@ class Node:
 
     def is_adjacent(self, node):
         return node in self.adjacents
+
+
+if __name__ == '__main__':
+
+    graph = Graph(UNDIRECTED)
+    graph.add_edge(1, 3)
+    graph.add_edge(1, 4)
+    graph.add_edge(5, 2)
+    graph.add_edge(6, 3)
+    graph.add_edge(7, 3)
+    graph.add_edge(8, 4)
+    graph.add_edge(9, 5)
+    graph.add_edge(10, 6)
+
+    graph.breadth_first_search(1)
+    print("\n")
+    graph.breadth_first_search(9)
+    print("\n")
+    graph.depth_first_search(1)
